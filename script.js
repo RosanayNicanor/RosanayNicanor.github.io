@@ -16,7 +16,7 @@ const CONFIG = {
 
   // 📱 Número de WhatsApp (con código de país, sin '+' ni espacios)
   // Perú: 51 + 9 dígitos   Ej: '51987654321'
-  WHATSAPP_NUMBER: '51987654321',
+  WHATSAPP_NUMBER: '51912762243',
 
   // 💬 Mensaje prellenado para WhatsApp
   WHATSAPP_MESSAGE: '¡Hola! Confirmo mi asistencia a la boda de Rosana y Nicanor el 26 de julio. 🎉',
