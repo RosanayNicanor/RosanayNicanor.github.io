@@ -12,7 +12,7 @@
 const CONFIG = {
   // 📅 Fecha y hora de la boda (formato: 'YYYY-MM-DDTHH:MM:SS')
   // La hora está en zona horaria local del servidor; ajusta si es necesario
-  WEDDING_DATE: '2025-07-26T15:00:00',
+  WEDDING_DATE: '2026-07-26T15:00:00',
 
   // 📱 Número de WhatsApp (con código de país, sin '+' ni espacios)
   // Perú: 51 + 9 dígitos   Ej: '51987654321'
