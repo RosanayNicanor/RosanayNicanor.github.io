@@ -46,6 +46,33 @@ const CONFIG = {
         isPlaying = false;
         updateAudioUI(false);
       });
+       let autoStarted = false;
+
+function startAudioOnScroll() {
+  if (autoStarted || isPlaying) return;
+
+  music.play()
+    .then(() => {
+      isPlaying = true;
+      autoStarted = true;
+      music.volume = 0;
+      fadeAudio(music, 0.35, 1200);
+      updateAudioUI(true);
+
+      // Elimina listeners después del primer uso
+      ['scroll', 'click', 'touchstart'].forEach(event => {
+        window.removeEventListener(event, startAudioOnScroll);
+      });
+    })
+    .catch(() => {
+      // Si falla, el usuario puede usar el botón
+    });
+}
+
+// Escuchar primera interacción del usuario
+['scroll', 'click', 'touchstart'].forEach(event => {
+  window.addEventListener(event, startAudioOnScroll);
+});
     } else {
       music.play()
         .then(() => {
@@ -58,28 +85,6 @@ const CONFIG = {
           // El navegador bloqueó el audio; muéstrale al usuario que intente de nuevo
           label.textContent = 'Activar';
         });
-       let autoStarted = false;
-      function startAudioOnScroll() {
-     if (autoStarted || isPlaying) return;
-
-  music.play()
-    .then(() => {
-      isPlaying = true;
-      autoStarted = true;
-      music.volume = 0;
-      fadeAudio(music, 0.35, 1200);
-      updateAudioUI(true);
-
-      // Remueve el listener después del primer uso
-      window.removeEventListener('scroll', startAudioOnScroll);
-    })
-    .catch(() => {
-      // Si falla, no hacemos nada (el botón sigue funcionando)
-    });
-}
-
-// Detecta el primer scroll real
-window.addEventListener('scroll', startAudioOnScroll);
     }
   });
 
