@@ -23,70 +23,67 @@ const CONFIG = {
 };
 
 /* ─────────────────────────────────────────────────────────
-   🎵  CONTROL DE AUDIO
+   🎵  CONTROL DE AUDIO (OPTIMIZADO PRO)
    ───────────────────────────────────────────────────────── */
 
 (function initAudio() {
-  const btn      = document.getElementById('audioBtn');
-  const music    = document.getElementById('bgMusic');
-  const icon     = document.getElementById('audioIcon');
-  const label    = document.getElementById('audioLabel');
+  const btn   = document.getElementById('audioBtn');
+  const music = document.getElementById('bgMusic');
+  const icon  = document.getElementById('audioIcon');
+  const label = document.getElementById('audioLabel');
+
   let isPlaying  = false;
+  let autoStarted = false;
 
   if (!btn || !music) return;
 
-  // Configura el volumen inicial
-  music.volume = 0.35;
+  // 🎚️ Volumen inicial (más elegante)
+  music.volume = 0.25;
 
+  /* ───────── BOTÓN MANUAL ───────── */
   btn.addEventListener('click', () => {
     if (isPlaying) {
-      // Fade out suave
       fadeAudio(music, 0, 800, () => {
         music.pause();
         isPlaying = false;
         updateAudioUI(false);
       });
-       let autoStarted = false;
-
-function startAudioOnScroll() {
-  if (autoStarted || isPlaying) return;
-
-  music.play()
-    .then(() => {
-      isPlaying = true;
-      autoStarted = true;
-      music.volume = 0;
-      fadeAudio(music, 0.35, 1200);
-      updateAudioUI(true);
-
-      // Elimina listeners después del primer uso
-      ['scroll', 'click', 'touchstart'].forEach(event => {
-        window.removeEventListener(event, startAudioOnScroll);
-      });
-    })
-    .catch(() => {
-      // Si falla, el usuario puede usar el botón
-    });
-}
-
-// Escuchar primera interacción del usuario
-['scroll', 'click', 'touchstart'].forEach(event => {
-  window.addEventListener(event, startAudioOnScroll);
-});
     } else {
-      music.play()
-        .then(() => {
-          isPlaying = true;
-          music.volume = 0;
-          fadeAudio(music, 0.35, 1200);
-          updateAudioUI(true);
-        })
-        .catch(() => {
-          // El navegador bloqueó el audio; muéstrale al usuario que intente de nuevo
-          label.textContent = 'Activar';
-        });
+      playWithFade();
     }
   });
+
+  /* ───────── AUTO PLAY (SCROLL / INTERACCIÓN) ───────── */
+  function startAudio() {
+    if (autoStarted || isPlaying) return;
+
+    playWithFade();
+    autoStarted = true;
+
+    // eliminar listeners después del primer uso
+    ['scroll', 'click', 'touchstart'].forEach(event => {
+      window.removeEventListener(event, startAudio);
+    });
+  }
+
+  ['scroll', 'click', 'touchstart'].forEach(event => {
+    window.addEventListener(event, startAudio, { passive: true });
+  });
+
+  /* ───────── FUNCIONES AUXILIARES ───────── */
+
+  function playWithFade() {
+    music.play()
+      .then(() => {
+        isPlaying = true;
+        music.volume = 0;
+        fadeAudio(music, 0.25, 1200);
+        updateAudioUI(true);
+      })
+      .catch(() => {
+        label.textContent = 'Activar';
+      });
+  }
 
   function updateAudioUI(playing) {
     icon.textContent  = playing ? '♫' : '♪';
@@ -95,25 +92,25 @@ function startAudioOnScroll() {
     btn.setAttribute('aria-label', playing ? 'Pausar música' : 'Activar música');
   }
 
-  /** Transición suave de volumen */
   function fadeAudio(audioEl, targetVol, durationMs, onEnd) {
-    const startVol  = audioEl.volume;
-    const diff      = targetVol - startVol;
-    const steps     = 60;
-    const stepTime  = durationMs / steps;
-    let   step      = 0;
+    const startVol = audioEl.volume;
+    const diff     = targetVol - startVol;
+    const steps    = 60;
+    const stepTime = durationMs / steps;
+    let step = 0;
 
     const timer = setInterval(() => {
       step++;
       audioEl.volume = Math.max(0, Math.min(1, startVol + diff * (step / steps)));
+
       if (step >= steps) {
         clearInterval(timer);
         if (onEnd) onEnd();
       }
     }, stepTime);
   }
-})();
 
+})();
 
 /* ─────────────────────────────────────────────────────────
    ⏱️  CUENTA REGRESIVA EN TIEMPO REAL
