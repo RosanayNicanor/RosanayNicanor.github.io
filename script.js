@@ -58,6 +58,28 @@ const CONFIG = {
           // El navegador bloqueó el audio; muéstrale al usuario que intente de nuevo
           label.textContent = 'Activar';
         });
+       let autoStarted = false;
+      function startAudioOnScroll() {
+     if (autoStarted || isPlaying) return;
+
+  music.play()
+    .then(() => {
+      isPlaying = true;
+      autoStarted = true;
+      music.volume = 0;
+      fadeAudio(music, 0.35, 1200);
+      updateAudioUI(true);
+
+      // Remueve el listener después del primer uso
+      window.removeEventListener('scroll', startAudioOnScroll);
+    })
+    .catch(() => {
+      // Si falla, no hacemos nada (el botón sigue funcionando)
+    });
+}
+
+// Detecta el primer scroll real
+window.addEventListener('scroll', startAudioOnScroll);
     }
   });
 
