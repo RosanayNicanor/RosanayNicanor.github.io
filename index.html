@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rosana & Nicanor — 26 de Julio</title>
+  <meta name="description" content="Nos casamos el 26 de julio. Únete a nosotros para celebrar nuestro amor." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Pinyon+Script&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       AUDIO CONTROL
+  ═══════════════════════════════════════════ -->
+  <button class="audio-btn" id="audioBtn" aria-label="Activar música">
+    <span class="audio-icon" id="audioIcon">♪</span>
+    <span class="audio-label" id="audioLabel">Música</span>
+  </button>
+
+  <!-- Audio oculto — reemplaza src con tu archivo o enlace -->
+  <audio id="bgMusic" loop preload="none">
+    <!-- Para usar música local, coloca el archivo en la misma carpeta y usa: -->
+    <!-- <source src="music.mp3" type="audio/mpeg" /> -->
+    <!-- Sign of the Times - Harry Styles (debes proveer el archivo) -->
+  </audio>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECCIÓN 1 — HERO
+  ═══════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow reveal-up">Nos casamos</p>
+
+      <div class="hero__names reveal-up delay-1">
+        <span class="hero__name-script">Rosana</span>
+        <span class="hero__ampersand">&</span>
+        <span class="hero__name-script">Nicanor</span>
+      </div>
+
+      <p class="hero__date reveal-up delay-2">
+        <span class="hero__date-line">26 de Julio</span>
+        <span class="hero__date-sub">Huánuco · Perú</span>
+      </p>
+
+      <p class="hero__tagline reveal-up delay-3">
+        "Dos almas que encontraron en el otro su lugar en el mundo."
+      </p>
+
+      <a href="#historia" class="hero__cta reveal-up delay-4">
+        Ver nuestra invitación
+        <span class="hero__cta-arrow">↓</span>
+      </a>
+    </div>
+
+    <!-- Ornamento decorativo -->
+    <div class="hero__ornament hero__ornament--left" aria-hidden="true">
+      <svg viewBox="0 0 60 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="M30 0 Q35 50 30 100 Q25 150 30 200" stroke="currentColor" stroke-width="0.5" />
+        <circle cx="30" cy="50" r="3" fill="currentColor" opacity="0.4"/>
+        <circle cx="30" cy="100" r="4" fill="currentColor" opacity="0.6"/>
+        <circle cx="30" cy="150" r="3" fill="currentColor" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="hero__ornament hero__ornament--right" aria-hidden="true">
+      <svg viewBox="0 0 60 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="M30 0 Q25 50 30 100 Q35 150 30 200" stroke="currentColor" stroke-width="0.5" />
+        <circle cx="30" cy="50" r="3" fill="currentColor" opacity="0.4"/>
+        <circle cx="30" cy="100" r="4" fill="currentColor" opacity="0.6"/>
+        <circle cx="30" cy="150" r="3" fill="currentColor" opacity="0.4"/>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECCIÓN 2 — NUESTRA HISTORIA
+  ═══════════════════════════════════════════ -->
+  <section class="section historia" id="historia">
+    <div class="container">
+      <div class="section-label reveal-up">Nuestra Historia</div>
+      <h2 class="section-title reveal-up delay-1">Un amor que no buscamos<br/><em>pero que siempre esperamos</em></h2>
+
+      <div class="historia__body reveal-up delay-2">
+        <p>
+          Hay historias que no se planean. La nuestra empezó con una mirada que duró un segundo de más, con una conversación que no quería terminar, con la certeza silenciosa de que algo había cambiado para siempre.
+        </p>
+        <p>
+          Rosana y Nicanor aprendieron juntos que el amor verdadero no es perfección: es presencia. Es reírse de las mismas cosas, sostener al otro en los días difíciles, y elegirse —siempre— con la misma convicción del primer día.
+        </p>
+        <p>
+          Hoy, con el corazón lleno y rodeados de quienes más queremos, damos el paso más hermoso de nuestras vidas. Gracias por ser parte de este momento.
+        </p>
+      </div>
+
+      <div class="historia__divider reveal-up delay-3" aria-hidden="true">✦</div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECCIÓN 3 — CUENTA REGRESIVA
+  ═══════════════════════════════════════════ -->
+  <section class="section countdown-section" id="cuenta">
+    <div class="container">
+      <div class="section-label reveal-up" style="color: var(--ivory);">Faltan</div>
+      <h2 class="section-title reveal-up delay-1" style="color: var(--ivory);">Solo quedan</h2>
+
+      <div class="countdown reveal-up delay-2">
+        <div class="countdown__unit">
+          <span class="countdown__number" id="days">00</span>
+          <span class="countdown__label">Días</span>
+        </div>
+        <div class="countdown__sep" aria-hidden="true">:</div>
+        <div class="countdown__unit">
+          <span class="countdown__number" id="hours">00</span>
+          <span class="countdown__label">Horas</span>
+        </div>
+        <div class="countdown__sep" aria-hidden="true">:</div>
+        <div class="countdown__unit">
+          <span class="countdown__number" id="minutes">00</span>
+          <span class="countdown__label">Minutos</span>
+        </div>
+        <div class="countdown__sep" aria-hidden="true">:</div>
+        <div class="countdown__unit">
+          <span class="countdown__number" id="seconds">00</span>
+          <span class="countdown__label">Segundos</span>
+        </div>
+      </div>
+
+      <p class="countdown__until reveal-up delay-3">hasta que digamos <em>Sí, acepto</em></p>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECCIÓN 4 — EVENTO
+  ═══════════════════════════════════════════ -->
+  <section class="section evento" id="evento">
+    <div class="container">
+      <div class="section-label reveal-up">El Gran Día</div>
+      <h2 class="section-title reveal-up delay-1">26 de Julio<br/><em>Huánuco · Perú</em></h2>
+
+      <div class="evento__grid reveal-up delay-2">
+
+        <div class="evento__card">
+          <div class="evento__icon" aria-hidden="true">✦</div>
+          <h3 class="evento__card-title">Ceremonia</h3>
+          <p class="evento__time">3:00 PM</p>
+          <p class="evento__place">Iglesia</p>
+          <p class="evento__address">Huánuco, Perú<br/><em>(Dirección por confirmar)</em></p>
+        </div>
+
+        <div class="evento__divider" aria-hidden="true">
+          <svg viewBox="0 0 2 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="1" y1="0" x2="1" y2="100" stroke="currentColor" stroke-width="0.5" stroke-dasharray="4 4"/>
+          </svg>
+        </div>
+
+        <div class="evento__card">
+          <div class="evento__icon" aria-hidden="true">✦</div>
+          <h3 class="evento__card-title">Recepción</h3>
+          <p class="evento__time">6:00 PM</p>
+          <p class="evento__place">Salón de Celebraciones</p>
+          <p class="evento__address">Tingo María / Huánuco<br/><em>(Local por confirmar)</em></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECCIÓN 5 — GALERÍA
+  ═══════════════════════════════════════════ -->
+  <section class="section galeria" id="galeria">
+    <div class="container">
+      <div class="section-label reveal-up">Momentos</div>
+      <h2 class="section-title reveal-up delay-1">Nuestra historia<br/><em>en imágenes</em></h2>
+    </div>
+
+    <div class="galeria__grid reveal-up delay-2">
+      <!-- Placeholders — reemplaza src con tus fotos reales -->
+      <div class="galeria__item galeria__item--tall">
+        <div class="galeria__placeholder">
+          <span>Foto 1</span>
+        </div>
+      </div>
+      <div class="galeria__item">
+        <div class="galeria__placeholder">
+          <span>Foto 2</span>
+        </div>
+      </div>
+      <div class="galeria__item">
+        <div class="galeria__placeholder">
+          <span>Foto 3</span>
+        </div>
+      </div>
+      <div class="galeria__item galeria__item--wide">
+        <div class="galeria__placeholder">
+          <span>Foto 4</span>
+        </div>
+      </div>
+      <div class="galeria__item">
+        <div class="galeria__placeholder">
+          <span>Foto 5</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECCIÓN 6 — DRESS CODE
+  ═══════════════════════════════════════════ -->
+  <section class="section dresscode" id="dresscode">
+    <div class="container">
+      <div class="section-label reveal-up">Vestimenta</div>
+      <h2 class="section-title reveal-up delay-1">Dress Code</h2>
+
+      <div class="dresscode__body reveal-up delay-2">
+        <div class="dresscode__palette">
+          <div class="dresscode__swatch" style="background: #F8F5F0;" title="Marfil"></div>
+          <div class="dresscode__swatch" style="background: #C9B9A8;" title="Champagne"></div>
+          <div class="dresscode__swatch" style="background: #6B0F1A;" title="Granate"></div>
+          <div class="dresscode__swatch" style="background: #3D2B1F;" title="Chocolate"></div>
+        </div>
+        <p class="dresscode__text">
+          Los invitamos a vestir con elegancia y sobriedad. La paleta sugerida incluye tonos <strong>marfil, champagne, granate y chocolate</strong>. Evitar el blanco puro, reservado para la novia.
+        </p>
+        <p class="dresscode__sub">
+          Formal — Coctel elegante
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECCIÓN 7 — ITINERARIO
+  ═══════════════════════════════════════════ -->
+  <section class="section itinerario" id="itinerario">
+    <div class="container">
+      <div class="section-label reveal-up">El Día</div>
+      <h2 class="section-title reveal-up delay-1">Itinerario</h2>
+
+      <div class="timeline">
+        <div class="timeline__item reveal-left">
+          <div class="timeline__time">3:00 PM</div>
+          <div class="timeline__dot" aria-hidden="true"></div>
+          <div class="timeline__content">
+            <h3>Ceremonia Religiosa</h3>
+            <p>Nos damos el "Sí, acepto" ante Dios y nuestras familias.</p>
+          </div>
+        </div>
+        <div class="timeline__item reveal-right">
+          <div class="timeline__time">5:00 PM</div>
+          <div class="timeline__dot" aria-hidden="true"></div>
+          <div class="timeline__content">
+            <h3>Sesión de Fotos</h3>
+            <p>Capturamos los primeros momentos como esposos.</p>
+          </div>
+        </div>
+        <div class="timeline__item reveal-left">
+          <div class="timeline__time">6:00 PM</div>
+          <div class="timeline__dot" aria-hidden="true"></div>
+          <div class="timeline__content">
+            <h3>Recepción & Cóctel</h3>
+            <p>Apertura del salón, bienvenida a los invitados y brindis inicial.</p>
+          </div>
+        </div>
+        <div class="timeline__item reveal-right">
+          <div class="timeline__time">7:00 PM</div>
+          <div class="timeline__dot" aria-hidden="true"></div>
+          <div class="timeline__content">
+            <h3>Banquete & Celebración</h3>
+            <p>Cena, brindis oficiales, baile de los novios y fiesta.</p>
+          </div>
+        </div>
+        <div class="timeline__item reveal-left">
+          <div class="timeline__time">Noche</div>
+          <div class="timeline__dot" aria-hidden="true"></div>
+          <div class="timeline__content">
+            <h3>Música & Baile</h3>
+            <p>Celebración, recuerdos y despedida de una noche inolvidable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECCIÓN 8 — RSVP
+  ═══════════════════════════════════════════ -->
+  <section class="section rsvp" id="rsvp">
+    <div class="container">
+      <div class="section-label reveal-up">Confirmación</div>
+      <h2 class="section-title reveal-up delay-1">¿Nos acompañas?</h2>
+      <p class="rsvp__text reveal-up delay-2">
+        Tu presencia es el mejor regalo. Confirma tu asistencia antes del <strong>10 de julio</strong> escribiéndonos por WhatsApp.
+      </p>
+
+      <!-- CONFIGURA TU NÚMERO: Cambia el número en script.js (variable WHATSAPP_NUMBER) -->
+      <a class="rsvp__btn reveal-up delay-3" id="whatsappBtn" href="#" target="_blank" rel="noopener">
+        <svg class="rsvp__wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" fill="currentColor"/>
+        </svg>
+        Confirmar asistencia por WhatsApp
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       SECCIÓN 9 — MENSAJE FINAL
+  ═══════════════════════════════════════════ -->
+  <section class="section final" id="final">
+    <div class="container">
+      <div class="final__script reveal-up">Rosana & Nicanor</div>
+
+      <blockquote class="final__quote reveal-up delay-1">
+        "El amor no se mide en el tiempo que llevamos juntos, sino en la certeza con la que nos elegimos cada día. Gracias por ser parte de nuestra historia."
+      </blockquote>
+
+      <p class="final__sub reveal-up delay-2">Con todo nuestro amor,</p>
+      <p class="final__names reveal-up delay-3">Rosana &amp; Nicanor</p>
+      <p class="final__date reveal-up delay-4">26 · VII · 2025</p>
+
+      <div class="final__ornament reveal-up delay-5" aria-hidden="true">✦ ✦ ✦</div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="footer">
+    <p>Hecho con amor para Rosana &amp; Nicanor · 2025</p>
+  </footer>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
