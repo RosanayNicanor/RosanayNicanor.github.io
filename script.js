@@ -1,278 +1,531 @@
-/* ═══════════════════════════════════════════════════════════
-   ROSANA & NICANOR — WEDDING INVITATION
-   script.js · Vanilla JS · Sin dependencias
-   ═══════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   BODA — Lorenzo & Isabella
+   script.js · Interactions & Animation Engine
+   ════════════════════════════════════════════════════════ */
 
-'use strict';
+const App = (() => {
 
-/* ─────────────────────────────────────────────────────────
-   ⚙️  CONFIGURACIÓN — Personaliza aquí
-   ───────────────────────────────────────────────────────── */
+  /* ── CONFIG ─────────────────────────────────────────── */
+  const CONFIG = {
+    weddingDate: new Date('2025-10-19T16:00:00'),
+    calendarUrl: 'https://www.google.com/calendar/render?action=TEMPLATE'
+      + '&text=Boda+Lorenzo+%26+Isabella'
+      + '&dates=20251019T160000%2F20251020T000000'
+      + '&location=Sal%C3%B3n+de+Eventos+Notre+Dame'
+      + '&details=Celebramos+nuestra+boda.+%C2%A1Nos+acompa%C3%B1as%3F',
+  };
 
-const CONFIG = {
-  // 📅 Fecha y hora de la boda (formato: 'YYYY-MM-DDTHH:MM:SS')
-  // La hora está en zona horaria local del servidor; ajusta si es necesario
-  WEDDING_DATE: '2026-07-26T15:00:00',
+  /* ── STATE ──────────────────────────────────────────── */
+  let countdownInterval = null;
+  let lastSeconds = -1;
+  let animObserver = null;
+  let lightboxOpen = false;
 
-  // 📱 Número de WhatsApp (con código de país, sin '+' ni espacios)
-  // Perú: 51 + 9 dígitos   Ej: '51987654321'
-  WHATSAPP_NUMBER: '51912762243',
 
-  // 💬 Mensaje prellenado para WhatsApp
-  WHATSAPP_MESSAGE: '¡Hola! Confirmo mi asistencia a la boda de Rosana y Nicanor el 26 de julio. 🎉',
-};
-
-/* ─────────────────────────────────────────────────────────
-   🎵  CONTROL DE AUDIO (OPTIMIZADO PRO)
-   ───────────────────────────────────────────────────────── */
-
-(function initAudio() {
-  const btn   = document.getElementById('audioBtn');
-  const music = document.getElementById('bgMusic');
-  const icon  = document.getElementById('audioIcon');
-  const label = document.getElementById('audioLabel');
-
-  let isPlaying  = false;
-  let autoStarted = false;
-
-  if (!btn || !music) return;
-
-  // 🎚️ Volumen inicial (más elegante)
-  music.volume = 0.25;
-
-  /* ───────── BOTÓN MANUAL ───────── */
-  btn.addEventListener('click', () => {
-    if (isPlaying) {
-      fadeAudio(music, 0, 800, () => {
-        music.pause();
-        isPlaying = false;
-        updateAudioUI(false);
-      });
-    } else {
-      playWithFade();
-    }
-  });
-
-  /* ───────── AUTO PLAY (SCROLL / INTERACCIÓN) ───────── */
-  function startAudio() {
-    if (autoStarted || isPlaying) return;
-
-    playWithFade();
-    autoStarted = true;
-
-    // eliminar listeners después del primer uso
-    ['scroll', 'click', 'touchstart'].forEach(event => {
-      window.removeEventListener(event, startAudio);
-    });
+  /* ════════════════════════════════════════════════════
+     INIT
+  ════════════════════════════════════════════════════ */
+  function init() {
+    parseUrlParams();
+    setupCalendarLink();
+    setupCountdown();
+    setupNav();
+    setupScrollIndicator();
+    setupGallery();
+    setupLightbox();
+    setupCopyButtons();
+    setupTimeline();
+    // Animations boot after intro is dismissed
   }
 
-  ['scroll', 'click', 'touchstart'].forEach(event => {
-    window.addEventListener(event, startAudio, { passive: true });
-  });
 
-  /* ───────── FUNCIONES AUXILIARES ───────── */
+  /* ════════════════════════════════════════════════════
+     URL PARAMETERS
+  ════════════════════════════════════════════════════ */
+  function parseUrlParams() {
+    const params = new URLSearchParams(window.location.search);
 
-  function playWithFade() {
-    music.play()
-      .then(() => {
-        isPlaying = true;
-        music.volume = 0;
-        fadeAudio(music, 0.25, 1200);
-        updateAudioUI(true);
-      })
-      .catch(() => {
-        label.textContent = 'Activar';
-      });
+    // Guest name — ?m=Name or fallback
+    const nombre = params.get('m') || params.get('nombre') || 'Invitado Especial';
+    const elNombre = document.getElementById('nombre-invitado');
+    if (elNombre) elNombre.textContent = nombre;
+
+    // Passes — ?n=X pases or just a number
+    const pasesRaw = params.get('n') || '2';
+    const pasesNum = (pasesRaw.match(/\d+/) || ['2'])[0];
+    const elPases = document.getElementById('pases-num');
+    if (elPases) elPases.textContent = pasesNum;
   }
 
-  function updateAudioUI(playing) {
-    icon.textContent  = playing ? '♫' : '♪';
-    label.textContent = playing ? 'Pausar' : 'Música';
-    btn.classList.toggle('is-playing', playing);
-    btn.setAttribute('aria-label', playing ? 'Pausar música' : 'Activar música');
+
+  /* ════════════════════════════════════════════════════
+     CALENDAR LINK
+  ════════════════════════════════════════════════════ */
+  function setupCalendarLink() {
+    const btn = document.getElementById('btn-calendar');
+    if (btn) btn.href = CONFIG.calendarUrl;
   }
 
-  function fadeAudio(audioEl, targetVol, durationMs, onEnd) {
-    const startVol = audioEl.volume;
-    const diff     = targetVol - startVol;
-    const steps    = 60;
-    const stepTime = durationMs / steps;
-    let step = 0;
 
-    const timer = setInterval(() => {
-      step++;
-      audioEl.volume = Math.max(0, Math.min(1, startVol + diff * (step / steps)));
-
-      if (step >= steps) {
-        clearInterval(timer);
-        if (onEnd) onEnd();
-      }
-    }, stepTime);
+  /* ════════════════════════════════════════════════════
+     COUNTDOWN
+  ════════════════════════════════════════════════════ */
+  function setupCountdown() {
+    tick();
+    countdownInterval = setInterval(tick, 1000);
   }
 
-})();
+  function tick() {
+    const now  = new Date();
+    const diff = CONFIG.weddingDate - now;
 
-/* ─────────────────────────────────────────────────────────
-   ⏱️  CUENTA REGRESIVA EN TIEMPO REAL
-   ───────────────────────────────────────────────────────── */
-
-(function initCountdown() {
-  const daysEl    = document.getElementById('days');
-  const hoursEl   = document.getElementById('hours');
-  const minutesEl = document.getElementById('minutes');
-  const secondsEl = document.getElementById('seconds');
-
-  if (!daysEl) return;
-
-  const weddingDate = new Date(CONFIG.WEDDING_DATE).getTime();
-
-  function pad(n) {
-    return String(n).padStart(2, '0');
-  }
-
-  function tick(el, newVal) {
-    const old = el.textContent;
-    if (old !== newVal) {
-      el.classList.remove('tick');
-      // Fuerza reflow para reiniciar la animación
-      void el.offsetWidth;
-      el.classList.add('tick');
-      el.textContent = newVal;
-      setTimeout(() => el.classList.remove('tick'), 300);
-    }
-  }
-
-  function update() {
-    const now  = Date.now();
-    const diff = weddingDate - now;
+    const ids = ['cd-dias', 'cd-hrs', 'cd-mins', 'cd-segs'];
 
     if (diff <= 0) {
-      // ¡Es hoy! Muestra un mensaje especial
-      daysEl.textContent    = '00';
-      hoursEl.textContent   = '00';
-      minutesEl.textContent = '00';
-      secondsEl.textContent = '00';
-
-      const countdownEl = document.querySelector('.countdown__until');
-      if (countdownEl) {
-        countdownEl.innerHTML = '¡<em>Hoy es el gran día!</em> 🎉';
-      }
+      ids.forEach(id => setCountdownNum(id, '00'));
+      clearInterval(countdownInterval);
       return;
     }
 
-    const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    const days = Math.floor(diff / 86400000);
+    const hrs  = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000)  / 60000);
+    const segs = Math.floor((diff % 60000)    / 1000);
 
-    tick(daysEl,    pad(days));
-    tick(hoursEl,   pad(hours));
-    tick(minutesEl, pad(minutes));
-    tick(secondsEl, pad(seconds));
+    const values = [days, hrs, mins, segs];
+
+    // Only flip seconds digit every second (and by extension carry)
+    const currentSeconds = segs;
+    const secondsChanged = currentSeconds !== lastSeconds;
+    lastSeconds = currentSeconds;
+
+    values.forEach((val, i) => {
+      const str = String(val).padStart(2, '0');
+      const el  = document.getElementById(ids[i]);
+      if (!el) return;
+
+      if (el.textContent !== str) {
+        if (secondsChanged) {
+          el.classList.remove('flipping');
+          // Force reflow for re-triggering animation
+          void el.offsetWidth;
+          el.classList.add('flipping');
+        }
+        el.textContent = str;
+      }
+    });
   }
 
-  update();
-  setInterval(update, 1000);
-})();
-
-
-/* ─────────────────────────────────────────────────────────
-   📱  WHATSAPP RSVP
-   ───────────────────────────────────────────────────────── */
-
-(function initWhatsApp() {
-  const btn = document.getElementById('whatsappBtn');
-  if (!btn) return;
-
-  const encoded = encodeURIComponent(CONFIG.WHATSAPP_MESSAGE);
-  btn.href = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encoded}`;
-})();
-
-
-/* ─────────────────────────────────────────────────────────
-   🌊  SCROLL REVEAL — Intersection Observer
-   ───────────────────────────────────────────────────────── */
-
-(function initScrollReveal() {
-  const targets = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
-  if (!targets.length) return;
-
-  // Verifica soporte para IntersectionObserver
-  if (!('IntersectionObserver' in window)) {
-    targets.forEach(el => el.classList.add('revealed'));
-    return;
+  function setCountdownNum(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          observer.unobserve(entry.target);
+
+  /* ════════════════════════════════════════════════════
+     NAVIGATION
+  ════════════════════════════════════════════════════ */
+  function setupNav() {
+    const nav = document.getElementById('nav');
+    if (!nav) return;
+
+    // Scroll handler
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrolled = window.scrollY > 60;
+          nav.classList.toggle('scrolled', scrolled);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Smooth scroll for nav links
+    nav.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
-    },
-    {
-      threshold: 0.12,
-      rootMargin: '0px 0px -60px 0px',
-    }
-  );
-
-  targets.forEach(el => observer.observe(el));
-})();
-
-
-/* ─────────────────────────────────────────────────────────
-   🎯  SCROLL SUAVE para anclas internas
-   ───────────────────────────────────────────────────────── */
-
-(function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      const targetId = link.getAttribute('href').slice(1);
-      const target   = document.getElementById(targetId);
-      if (!target) return;
-
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-  });
-})();
+  }
 
 
-/* ─────────────────────────────────────────────────────────
-   ✨  ANIMACIÓN INICIAL DEL HERO (on load)
-   ───────────────────────────────────────────────────────── */
+  /* ════════════════════════════════════════════════════
+     SCROLL INDICATOR (hero)
+  ════════════════════════════════════════════════════ */
+  function setupScrollIndicator() {
+    const indicator = document.querySelector('.hero-scroll-indicator');
+    if (!indicator) return;
 
-(function initHeroEntrance() {
-  // Elementos del hero que deben revelarse al cargar
-  const heroElements = document.querySelectorAll('.hero .reveal-up');
-  if (!heroElements.length) return;
+    // Show after a delay
+    setTimeout(() => indicator.classList.add('visible'), 3500);
 
-  // Pequeño delay para asegurar que el DOM está listo
-  setTimeout(() => {
-    heroElements.forEach(el => {
-      el.classList.add('revealed');
+    // Hide when user scrolls
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 80) indicator.classList.remove('visible');
+    }, { passive: true, once: false });
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     ANIMATION OBSERVER
+  ════════════════════════════════════════════════════ */
+  function bootAnimations() {
+    // Mark body as animation-ready — CSS picks this up
+    document.body.classList.add('anim-ready');
+
+    animObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el    = entry.target;
+        const delay = parseInt(el.dataset.delay || '0', 10);
+        setTimeout(() => {
+          el.style.animationDelay = delay + 'ms';
+        }, 0);
+        animObserver.unobserve(el);
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
     });
-  }, 200);
-})();
 
+    document.querySelectorAll('[data-anim]').forEach(el => {
+      animObserver.observe(el);
+    });
 
-/* ─────────────────────────────────────────────────────────
-   🪄  REDUCIR MOVIMIENTO si el usuario lo prefiere
-   ───────────────────────────────────────────────────────── */
-
-(function respectMotionPreference() {
-  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-  function applyMotionPref(query) {
-    if (query.matches) {
-      // Revela todo inmediatamente
-      document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right')
-        .forEach(el => el.classList.add('revealed'));
+    // Timeline line reveal
+    const tl = document.querySelector('.timeline');
+    if (tl) {
+      const tlObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          tl.classList.add('tl-line-visible');
+          tlObserver.disconnect();
+        }
+      }, { threshold: 0.2 });
+      tlObserver.observe(tl);
     }
   }
 
-  applyMotionPref(mq);
-  mq.addEventListener('change', applyMotionPref);
+
+  /* ════════════════════════════════════════════════════
+     INTRO
+  ════════════════════════════════════════════════════ */
+  function enterSite() {
+    const intro = document.getElementById('intro');
+    const nav   = document.getElementById('nav');
+    if (!intro) return;
+
+    intro.classList.add('exiting');
+
+    // Make nav visible
+    if (nav) {
+      setTimeout(() => nav.classList.add('visible'), 800);
+    }
+
+    // Remove intro from DOM and start hero animations
+    setTimeout(() => {
+      intro.style.display = 'none';
+      bootAnimations();
+
+      // Scroll indicator
+      setTimeout(() => {
+        const indicator = document.querySelector('.hero-scroll-indicator');
+        if (indicator) indicator.classList.add('visible');
+      }, 2500);
+    }, 1500);
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     GALLERY
+  ════════════════════════════════════════════════════ */
+  function setupGallery() {
+    const items = document.querySelectorAll('.galeria-item');
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        const img = item.querySelector('img');
+        if (img) openLightbox(img.src, img.alt);
+      });
+    });
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     LIGHTBOX
+  ════════════════════════════════════════════════════ */
+  function setupLightbox() {
+    // Create lightbox elements
+    const lb = document.createElement('div');
+    lb.id = 'lightbox';
+    lb.setAttribute('role', 'dialog');
+    lb.setAttribute('aria-modal', 'true');
+    lb.setAttribute('aria-label', 'Fotografía ampliada');
+
+    const img = document.createElement('img');
+    img.id = 'lightbox-img';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.id = 'lightbox-close';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.setAttribute('aria-label', 'Cerrar');
+
+    lb.appendChild(img);
+    lb.appendChild(closeBtn);
+    document.body.appendChild(lb);
+
+    // Close on click
+    lb.addEventListener('click', (e) => {
+      if (e.target === lb || e.target === closeBtn) closeLightbox();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightboxOpen) closeLightbox();
+    });
+  }
+
+  function openLightbox(src, alt) {
+    const lb  = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    if (!lb || !img) return;
+    img.src = src;
+    img.alt = alt || '';
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    lightboxOpen = true;
+  }
+
+  function closeLightbox() {
+    const lb = document.getElementById('lightbox');
+    if (!lb) return;
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    lightboxOpen = false;
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     COPY BUTTONS
+  ════════════════════════════════════════════════════ */
+  function setupCopyButtons() {
+    document.querySelectorAll('.btn-copiar').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const text = btn.dataset.copy;
+        if (!text) return;
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.classList.add('copied');
+          const origHTML = btn.innerHTML;
+          btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/></svg> ¡Copiado!`;
+          showToast('Número copiado al portapapeles');
+          setTimeout(() => {
+            btn.innerHTML = origHTML;
+            btn.classList.remove('copied');
+          }, 2500);
+        } catch {
+          // Fallback for older browsers
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.cssText = 'position:absolute;opacity:0;';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+          showToast('Número copiado');
+        }
+      });
+    });
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     TIMELINE HOVER EFFECTS
+  ════════════════════════════════════════════════════ */
+  function setupTimeline() {
+    const items = document.querySelectorAll('.tl-item');
+    items.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        const dot = item.querySelector('.tl-dot');
+        if (dot) dot.style.background = 'var(--granate)';
+      });
+      item.addEventListener('mouseleave', () => {
+        const dot = item.querySelector('.tl-dot');
+        if (dot && !dot.classList.contains('featured')) {
+          dot.style.background = 'var(--marfil)';
+        }
+      });
+    });
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     TOAST NOTIFICATION
+  ════════════════════════════════════════════════════ */
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.remove('show');
+    void toast.offsetWidth; // reflow
+    toast.classList.add('show');
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     PARALLAX (subtle — only on desktop)
+  ════════════════════════════════════════════════════ */
+  function setupParallax() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if ('ontouchstart' in window) return;
+
+    const heroNames = document.querySelector('.hero-nombres-wrap');
+    const heroAmp   = document.querySelector('.hero-amp');
+
+    if (!heroNames) return;
+
+    let raf = null;
+    window.addEventListener('scroll', () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const vh = window.innerHeight;
+        if (scrollY < vh) {
+          const progress = scrollY / vh;
+          heroNames.style.transform = `translateY(${progress * 40}px)`;
+          if (heroAmp) heroAmp.style.transform = `translateY(${-10 + progress * 30}px)`;
+        }
+        raf = null;
+      });
+    }, { passive: true });
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     MAGNETIC BUTTONS (subtle pull effect)
+  ════════════════════════════════════════════════════ */
+  function setupMagneticButtons() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if ('ontouchstart' in window) return;
+
+    document.querySelectorAll('.btn, #intro-btn').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const cx = rect.left + rect.width  / 2;
+        const cy = rect.top  + rect.height / 2;
+        const dx = (e.clientX - cx) * 0.18;
+        const dy = (e.clientY - cy) * 0.18;
+        btn.style.transform = `translate(${dx}px, ${dy}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     CURSOR TRAIL (luxury touch on desktop)
+  ════════════════════════════════════════════════════ */
+  function setupCursorTrail() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if ('ontouchstart' in window) return;
+
+    const DOT_COUNT = 8;
+    const dots = [];
+
+    for (let i = 0; i < DOT_COUNT; i++) {
+      const dot = document.createElement('div');
+      dot.style.cssText = `
+        position: fixed;
+        width: ${3 - i * 0.25}px;
+        height: ${3 - i * 0.25}px;
+        border-radius: 50%;
+        background: rgba(107,15,26,${0.35 - i * 0.04});
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: opacity 0.3s;
+        will-change: left, top;
+      `;
+      document.body.appendChild(dot);
+      dots.push({ el: dot, x: -100, y: -100 });
+    }
+
+    let mouseX = -100, mouseY = -100;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    // Hide on touch
+    document.addEventListener('touchstart', () => {
+      dots.forEach(d => d.el.style.opacity = '0');
+    }, { passive: true });
+
+    function animateDots() {
+      let x = mouseX, y = mouseY;
+      dots.forEach((dot, i) => {
+        dot.x += (x - dot.x) * (0.5 - i * 0.04);
+        dot.y += (y - dot.y) * (0.5 - i * 0.04);
+        dot.el.style.left = dot.x + 'px';
+        dot.el.style.top  = dot.y + 'px';
+        x = dot.x;
+        y = dot.y;
+      });
+      requestAnimationFrame(animateDots);
+    }
+    animateDots();
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     SECTION PARALLAX BACKGROUNDS
+  ════════════════════════════════════════════════════ */
+  function setupSectionParallax() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const countdown = document.getElementById('countdown-section');
+    const rsvp      = document.getElementById('rsvp');
+
+    if (!countdown && !rsvp) return;
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+
+      if (countdown) {
+        const rect = countdown.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          const progress = 1 - (rect.bottom / (window.innerHeight + rect.height));
+          countdown.style.backgroundPositionY = `${progress * 30}px`;
+        }
+      }
+    }, { passive: true });
+  }
+
+
+  /* ════════════════════════════════════════════════════
+     WINDOW LOAD — full boot
+  ════════════════════════════════════════════════════ */
+  window.addEventListener('DOMContentLoaded', () => {
+    init();
+
+    // Post-load features
+    window.addEventListener('load', () => {
+      setupParallax();
+      setupMagneticButtons();
+      setupCursorTrail();
+      setupSectionParallax();
+    });
+  });
+
+
+  /* ── Public API ── */
+  return { enterSite, showToast, openLightbox };
+
 })();
