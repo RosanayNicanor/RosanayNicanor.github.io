@@ -13,6 +13,18 @@
 <body>
 
   <!-- ═══════════════════════════════════════════
+       LOADER — pantalla de carga inicial
+  ═══════════════════════════════════════════ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <img
+      class="loader__monograma"
+      src="assets/monograma.svg"
+      alt=""
+      aria-hidden="true"
+    />
+  </div>
+
+  <!-- ═══════════════════════════════════════════
        BLOQUE 1 — PORTADA DE BIENVENIDA
   ═══════════════════════════════════════════ -->
   <section id="bloque-1" class="bloque bloque-portada" aria-label="Portada de bienvenida">
@@ -167,6 +179,277 @@
     </div>
 
   </section>
+
+  <!-- ═══════════════════════════════════════════
+       BLOQUE 5 — CEREMONIA, PADRINOS & PADRES
+  ═══════════════════════════════════════════ -->
+  <section id="bloque-5" class="bloque-5" aria-label="Ceremonia, padrinos y padres">
+
+    <!-- ── PARTE A: Ceremonia & Recepción ── -->
+    <div class="b5-ceremonia">
+
+      <h2 class="b5-titulo reveal reveal-blur">CEREMONIA Y RECEPCIÓN</h2>
+
+      <div class="b5-lugares">
+
+        <!-- Columna: Iglesia -->
+        <div class="b5-lugar">
+          <img
+            class="b5-lugar__foto reveal reveal-left"
+            src="assets/foto-iglesia.png"
+            alt="Parroquia Nuestra Señora del Carmen, Tingo María"
+          />
+          <p class="b5-lugar__nombre reveal reveal-up reveal-delay-1">Parroquia Nuestra Señora del Carmen</p>
+          <p class="b5-lugar__dir reveal reveal-up reveal-delay-2">Jr. Raymondi 450, Tingo María · Huánuco, Perú</p>
+          <p class="b5-lugar__hora reveal reveal-up reveal-delay-3">3:00<span class="b5-lugar__hora-sub">pm</span></p>
+          <a
+            class="b5-lugar__btn reveal reveal-up reveal-delay-4"
+            href="https://maps.google.com/?q=Parroquia+Nuestra+Señora+del+Carmen+Tingo+Maria"
+            target="_blank"
+            rel="noopener"
+            aria-label="Ver Parroquia Nuestra Señora del Carmen en Google Maps"
+          >VER EN MAPA</a>
+        </div>
+
+        <!-- Línea vertical divisoria -->
+        <div class="b5-divider" aria-hidden="true"></div>
+
+        <!-- Columna: Hacienda -->
+        <div class="b5-lugar">
+          <img
+            class="b5-lugar__foto reveal reveal-right reveal-delay-1"
+            src="assets/foto-hacienda.png"
+            alt="Casa Hacienda Las Orquídeas, Tingo María"
+          />
+          <p class="b5-lugar__nombre reveal reveal-up reveal-delay-2">Casa Hacienda Las Orquídeas</p>
+          <p class="b5-lugar__dir reveal reveal-up reveal-delay-3">C. Central Km 2.5, Tingo María · Huánuco, Perú</p>
+          <p class="b5-lugar__hora reveal reveal-up reveal-delay-4">6:30<span class="b5-lugar__hora-sub">pm</span></p>
+          <a
+            class="b5-lugar__btn reveal reveal-up reveal-delay-5"
+            href="https://maps.google.com/?q=Casa+Hacienda+Las+Orquideas+Tingo+Maria"
+            target="_blank"
+            rel="noopener"
+            aria-label="Ver Casa Hacienda Las Orquídeas en Google Maps"
+          >VER EN MAPA</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── PARTE B: Nuestros Padrinos ── -->
+    <div class="b5-personas">
+      <div class="b5-personas__header reveal reveal-up">
+        <p class="b5-personas__super">NUESTROS</p>
+        <h3 class="b5-personas__titulo">PADRINOS</h3>
+      </div>
+      <div class="b5-personas__grid">
+        <p class="b5-nombre reveal reveal-up b5-nd-1">Carlos Mendoza</p>
+        <p class="b5-nombre reveal reveal-up b5-nd-2">Ana Flores</p>
+        <p class="b5-nombre reveal reveal-up b5-nd-3">Roberto Silva</p>
+        <p class="b5-nombre reveal reveal-up b5-nd-4">Patricia Torres</p>
+      </div>
+    </div>
+
+    <!-- ── PARTE C: Nuestros Padres ── -->
+    <div class="b5-personas">
+      <div class="b5-personas__header reveal reveal-up">
+        <p class="b5-personas__super">NUESTROS</p>
+        <h3 class="b5-personas__titulo">PADRES</h3>
+      </div>
+      <div class="b5-personas__grid">
+        <p class="b5-nombre reveal reveal-up b5-nd-1">Miguel Mantilla</p>
+        <p class="b5-nombre reveal reveal-up b5-nd-2">Carmen Carlos</p>
+        <p class="b5-nombre reveal reveal-up b5-nd-3">Jorge Gutierrez</p>
+        <p class="b5-nombre reveal reveal-up b5-nd-4">Rosa Flores</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       TICKER — separador entre bloque 5 y bloque 6
+  ═══════════════════════════════════════════ -->
+  <div class="ticker-separador" aria-hidden="true">
+    <div class="ticker__track">
+      <!-- Contenido inyectado por JS para loop infinito -->
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       BLOQUE 6 — GALERÍA
+  ═══════════════════════════════════════════ -->
+  <section id="bloque-6" class="bloque-6" aria-label="Galería de fotos">
+
+    <!-- Título esquina superior izquierda -->
+    <div class="galeria__titulo">
+      <span class="galeria__titulo--script">Nuestros</span>
+      <span class="galeria__titulo--caps">MOMENTOS</span>
+    </div>
+
+    <!-- Carrusel -->
+    <div class="galeria__track-wrapper" aria-label="Galería de fotos">
+      <div class="galeria__track" id="galeria-track">
+        <!-- 10 fotos placeholder; JS las duplica para el loop -->
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+        <div class="galeria__item"><img src="assets/historia-01.jpg" alt="Momento de Rosana y Nicanor" draggable="false" /></div>
+      </div>
+    </div>
+
+    <!-- Botón -->
+    <div class="galeria__btn-wrap">
+      <a
+        class="galeria__btn"
+        href="https://drive.google.com/placeholder"
+        target="_blank"
+        rel="noopener"
+        aria-label="Ver álbum de fotos en Google Drive"
+      >revivir momentos</a>
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       BLOQUE 7 — REGALOS
+  ═══════════════════════════════════════════ -->
+  <section id="bloque-7" class="bloque-regalos">
+
+    <h2 class="regalos__titulo reveal reveal-blur">TU PRESENCIA ES SUFICIENTE.</h2>
+    <p class="regalos__subtitulo reveal reveal-up reveal-delay-1">Si deseas hacernos un regalo, puedes hacerlo aquí.</p>
+
+    <div class="regalos__opciones">
+
+      <!-- OPCIÓN 1: TRANSFERENCIA -->
+      <div class="regalos__opcion reveal reveal-up reveal-delay-2">
+        <p class="regalos__opcion-label">TRANSFERENCIA BANCARIA</p>
+        <p class="regalos__opcion-info">BCP · Banco de Crédito del Perú</p>
+        <p class="regalos__opcion-info">Rosana Mantilla Carlos</p>
+        <button class="regalos__btn" id="btn-copiar">copiar número</button>
+      </div>
+
+      <!-- OPCIÓN 2: YAPE / PLIN -->
+      <div class="regalos__opcion reveal reveal-up reveal-delay-4">
+        <p class="regalos__opcion-label">YAPE . PLIN</p>
+        <p class="regalos__opcion-info">Escanea el código QR con</p>
+        <p class="regalos__opcion-info">Yape, Plin o tu billetera favorita</p>
+        <button class="regalos__btn" id="btn-qr">ver QR</button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       MODAL QR
+  ═══════════════════════════════════════════ -->
+  <div class="qr-modal" id="qr-modal" aria-hidden="true" role="dialog" aria-label="Código QR para pago" aria-modal="true">
+    <div class="qr-modal__card">
+      <button class="qr-modal__cerrar" id="btn-cerrar-qr" aria-label="Cerrar modal">✕</button>
+      <p class="qr-modal__titulo">YAPE · PLIN</p>
+      <p class="qr-modal__subtitulo">Escanea con tu billetera favorita</p>
+      <img class="qr-modal__img" src="assets/qr.png" alt="Código QR para Yape o Plin" />
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       BLOQUE 8 — DRESS CODE
+  ═══════════════════════════════════════════ -->
+  <section id="bloque-8" class="bloque-dresscode" aria-label="Dress Code">
+    <div class="dresscode__contenido">
+
+      <div class="dresscode__titulo-wrap reveal reveal-up">
+        <span class="dresscode__dress">Dress</span>
+        <span class="dresscode__code">code</span>
+      </div>
+
+      <p class="dresscode__estilo reveal reveal-up reveal-delay-2">Formal - Elegante</p>
+
+      <p class="dresscode__nota reveal reveal-up reveal-delay-3">El blanco queda reservado para la novia.</p>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       BLOQUE 9 — RSVP
+  ═══════════════════════════════════════════ -->
+  <section id="bloque-9" class="bloque-rsvp" aria-label="Confirmar asistencia">
+
+    <div class="rsvp__contenido">
+
+      <h2 class="rsvp__pregunta reveal reveal-blur reveal-up">¿Nos acompañas?</h2>
+
+      <a
+        class="rsvp__btn reveal reveal-up reveal-delay-2"
+        href="https://wa.me/51912762243?text=Hola%2C%20confirmo%20mi%20asistencia%20a%20la%20boda%20de%20Rosana%20%26%20Nicanor%20%F0%9F%A4%8D"
+        target="_blank"
+        rel="noopener"
+        aria-label="Confirmar asistencia por WhatsApp"
+      >confirmar asistencia</a>
+
+      <p class="rsvp__limite reveal reveal-up reveal-delay-3">Fecha límite: 10 de julio, 2026</p>
+
+      <div class="rsvp__cierre reveal reveal-up reveal-delay-4">
+        <img
+          class="rsvp__monograma"
+          src="assets/monograma.svg"
+          alt="Monograma R&amp;N"
+        />
+        <img
+          class="rsvp__nombres"
+          src="assets/titulo-nombres-2.svg"
+          alt="Rosana &amp; Nicanor · 26 julio 2026 · Huánuco · Tingo María · Perú"
+        />
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="site-footer" aria-label="Footer">
+
+    <div class="footer__cita">
+      <p class="footer__quote">"El amor no consiste en mirarse el uno al otro, sino en mirar juntos en la misma dirección."</p>
+    </div>
+
+    <div class="footer__linea-arcoiris" id="footer-arcoiris" aria-hidden="true"></div>
+
+    <div class="footer__barra">
+      <span class="footer__copy">2026 STEPHANO GINOCCHIO</span>
+      <a
+        class="footer__credito"
+        href="https://instagram.com/stephano_ginocchio_"
+        target="_blank"
+        rel="noopener"
+        aria-label="Instagram de Stephano Ginocchio, creador del sitio"
+      >WEBSITE BY STEPHANO GINOCCHIO</a>
+      <span class="footer__instagram">@STEPHANO_GINOCCHIO_</span>
+    </div>
+
+  </footer>
+
+  <!-- ═══════════════════════════════════════════
+       MÚSICA — botón flotante
+  ═══════════════════════════════════════════ -->
+  <audio id="musica-boda" src="assets/musica.mp3" loop preload="none"></audio>
+
+  <button
+    class="musica-btn"
+    id="musica-btn"
+    aria-label="Reproducir música"
+    aria-pressed="false"
+  >
+    <span class="musica-btn__icono">♩</span>
+  </button>
 
   <script src="script.js"></script>
 </body>
