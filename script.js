@@ -114,7 +114,7 @@
      BLOQUE 4 — Countdown en tiempo real
   ═══════════════════════════════════════════ */
   (function initCountdown() {
-    const target = new Date('2026-07-26T15:00:00').getTime();
+    const target = new Date('2026-07-25T15:00:00').getTime();
     const daysEl  = document.getElementById('cd-days');
     const hoursEl = document.getElementById('cd-hours');
     const minsEl  = document.getElementById('cd-mins');
@@ -334,7 +334,7 @@
   const track = document.querySelector('.ticker__track');
   if (!track) return;
 
-  const base      = 'Rosana & Nicanor 26 ❖ 07 ❖ 2026';
+  const base      = 'Rosana & Nicanor 25 ❖ 07 ❖ 2026';
   const separator = '    '; /* 4× em space */
   const unit      = base + separator;
 
